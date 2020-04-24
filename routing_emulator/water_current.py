@@ -59,7 +59,7 @@ class LambVorticeMap(object):
     def __init__(self, water_array: list, **kwargs):
 
         def get_new_location(x, y):
-            change_zoom = 2
+            change_zoom = 1
             rand_change_flag = random.randrange(0,2)
             if x <= map_size / 2 and y <= map_size / 2:
                 if rand_change_flag:

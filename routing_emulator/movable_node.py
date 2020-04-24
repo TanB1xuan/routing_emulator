@@ -15,7 +15,7 @@ import random
 
 class MovableNode(object):
     def __init__(self):
-        self.location = [[],[]]  # first list stores the location of pixle, next stores the location of map
+        self.location = [[],[]]  # first list stores the location of pixel, next stores the location of map
         self.volecity = []
 
     def __repr__(self):

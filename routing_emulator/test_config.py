@@ -52,6 +52,7 @@ class TestConfig(object):
                              self.floating_node_space,
                              self.sea_map)
             )
+            self.floating_node_list[i].id = i
         for i in range(self.floating_node_num):
             self.floating_node_space.add(self.floating_node_list[i].static_body)
             self.floating_node_space.add(self.floating_node_list[i].node_body.body,

@@ -11,13 +11,15 @@
 import pygame
 import pymunk
 import random
+from .font import Font
 from pymunk import pygame_util
 from .water_current import SeaMap
 
 
 class FloatingNode(object):
     def __init__(self, fill_color: list, map_size: int, rand_value: list, space, sea_map):
-        self.location = [[],[]]  # first list stores the location of pixle, next stores the location of map
+        self.fill_color = fill_color
+        self.location = [[],[]]  # first list stores the location of pixel, next stores the location of map
         self.location[0].append(rand_value[0])  # position on x axis
         self.location[0].append(rand_value[1])  # position on y axis
         self.location[1].append(int(self.location[0][0] / 20))
@@ -34,9 +36,12 @@ class FloatingNode(object):
         inner_color = [0xD3, 0xEE, 0x66]
         edge_color = [0xFF, 0x77, 0x55]
         communication_color = [0x7C, 0xAE, 0xF8]
+        font_text = f"X:{self.location[0][0]}; Y:{self.location[0][1]}"
+        floating_node_font = Font(font_text, (0x00, 0x00, 0x00), 20)
         pygame.draw.circle(self.image, inner_color, [51, 51], self.radius, )  # inner
         pygame.draw.circle(self.image, edge_color, [51, 51], self.radius, 3)  # edge
         pygame.draw.circle(self.image, communication_color, [51, 51], 50, 3)  # edge
+        self.image.blit(floating_node_font.surface, [0, 0])  # font
         self.image.set_colorkey(fill_color)
 
         '''set the static_edge pymunk body '''
@@ -60,7 +65,7 @@ class FloatingNode(object):
             pymunk.Segment(static_body, p_8, p_1, 0.0),
         ]
 
-        '''initializ the node'''
+        '''initialize the node'''
         mass = 10
         radius = self.radius
         inertia = pymunk.moment_for_circle(mass, 0, radius, (0, 0))
@@ -83,6 +88,19 @@ class FloatingNode(object):
         self.location[0][1] = y - 51
         self.location[1][0] = int(self.location[0][0] / 20)
         self.location[1][1] = int(self.location[0][1] / 20)
+        self.image = pygame.Surface(self.size)
+        self.image.fill(self.fill_color)
+        self.radius = 5 + 4 * self.worth_value
+        inner_color = [0xD3, 0xEE, 0x66]
+        edge_color = [0xFF, 0x77, 0x55]
+        communication_color = [0x7C, 0xAE, 0xF8]
+        font_text = f"X:{self.location[0][0]}; Y:{self.location[0][1]}"
+        floating_node_font = Font(font_text, (0x00, 0x00, 0x00), 20)
+        pygame.draw.circle(self.image, inner_color, [51, 51], self.radius, )  # inner
+        pygame.draw.circle(self.image, edge_color, [51, 51], self.radius, 3)  # edge
+        pygame.draw.circle(self.image, communication_color, [51, 51], 50, 3)  # edge
+        self.image.blit(floating_node_font.surface, [0, 0])  # font
+        self.image.set_colorkey(self.fill_color)
 
 
     def update_callback(self):
