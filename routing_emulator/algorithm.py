@@ -6,3 +6,9 @@
 :Author: Tanbixuan
 :Created: 2020-04-24
 """
+
+import scipy
+
+
+class RoutingAlgorithm(object):
+    pass
