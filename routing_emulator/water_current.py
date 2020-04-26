@@ -106,6 +106,7 @@ class LambVorticeMap(object):
                     if x > map_size - 5:
                         x = map_size
             return x, y
+
         self.gaussian_distr_force = copy.deepcopy(water_array)
         self.gaussian_value = copy.deepcopy(water_array)
         map_size = len(water_array)

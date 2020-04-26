@@ -13,6 +13,7 @@ import pymunk
 from pymunk import pygame_util
 from .water_current import SeaMap
 from .floating_node import FloatingNode
+from .algorithm import RoutingAlgorithm
 from math import sqrt
 from .movable_node import MovableNode
 
@@ -59,7 +60,6 @@ class TestConfig(object):
                                          self.floating_node_list[i].node_body)
             self.floating_node_list[i].update_callback()
 
-    # def move_all_nodes(self):
-    #     floating_node_list = self.floating_node_list
-    #     for floating_node in floating_node_list:
-    #         floating_node.move(self.sea_map)
+        """ get and draw the hull"""
+        self.algorithm_obj = RoutingAlgorithm(self)
+        self.algorithm_obj.get_convex_hulls()

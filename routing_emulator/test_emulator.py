@@ -64,6 +64,7 @@ def pygame_disp():
                 sea_map.rand_update()
                 sea_map.draw_image()
             screen.blit(sea_map.image, [0, 0])
+            screen.blit(test_config.algorithm_obj.hull_image, [0, 0])
             for floating_node in floating_node_list:
                 floating_node.update_node()
                 screen.blit(floating_node.image, floating_node.location[0])
