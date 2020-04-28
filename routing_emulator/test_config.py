@@ -15,7 +15,7 @@ from .water_current import SeaMap
 from .floating_node import FloatingNode
 from .algorithm import RoutingAlgorithm
 from math import sqrt
-from .movable_node import MovableNode
+from routing_emulator import movable_node
 
 
 class TestConfig(object):
@@ -60,6 +60,11 @@ class TestConfig(object):
                                          self.floating_node_list[i].node_body)
             self.floating_node_list[i].update_callback()
 
-        """ get and draw the hull"""
-        self.algorithm_obj = RoutingAlgorithm(self)
-        self.algorithm_obj.get_convex_hulls()
+        """ get and draw the hull """
+        self.convex_hull_obj = RoutingAlgorithm(self)
+        self.convex_hull_obj.get_convex_hulls()
+        
+        """ add movable node """
+        ori_location_node_num = self.convex_hull_obj.hull.vertices[0]
+        movable_node_ori_location = self.convex_hull_obj.node_list[ori_location_node_num]
+        self.movable_node = movable_node.ConvexHullMovableNode(self, movable_node_ori_location)

@@ -30,7 +30,7 @@ class Arrow(object):
             [2, 11 - arrow_length],
             [4, 11 - arrow_length],
         ]
-        pygame.draw.polygon(self.image, (0x00, 0xCC, 0xCC), point_list)
+        pygame.draw.polygon(self.image, (0x00 + 12 * arrow_length, 0xDD - 18 * arrow_length, 0xFF), point_list)
 
     def rotate_image(self, angle: int):
         self.image = pygame.transform.rotate(self.image, angle)
@@ -340,4 +340,3 @@ class SeaMap(object):
                     self.water_cur_force[x][y][0][1] = self.water_cur_force[x][y][0][1] * 2/3 + \
                                                        cur_lamb_v.gaussian_distr_force[x][y][1]
         self.update_water_cur()
-

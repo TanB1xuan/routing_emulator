@@ -28,6 +28,6 @@ class RoutingAlgorithm(object):
         self.hull_image = pygame.Surface([self.map_size, self.map_size])
         self.hull_image.fill(self.fill_color)
         self.hull_image.set_colorkey(self.fill_color)
-        self.line_color = [0x70, 0x00, 0xBB]
+        self.line_color = [0x88, 0x11, 0x66]
         point_list = [self.node_list[x] for x in self.hull.vertices]
         pygame.draw.lines(self.hull_image, self.line_color, True, point_list, 3)
