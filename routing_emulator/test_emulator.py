@@ -8,11 +8,6 @@
 """
 
 
-# import pygame
-# import pymunk
-
-
-# import pytest
 import sys
 import pygame
 import pymunk
@@ -35,6 +30,7 @@ def pygame_disp():
     FPS = 15
     counter = 0
     ticket_to_update_water = 0
+    ticket_to_set_trace = 0
     clock = pygame.time.Clock()
 
     screen = pygame.display.set_mode(size)
@@ -74,10 +70,18 @@ def pygame_disp():
             # test_config.floating_node_space.debug_draw(draw_options)
             # test_config.movable_node_space.debug_draw(draw_options)
 
-            """ movable node control"""
+            """ movable node control """
             test_config.movable_node.update_status()
             test_config.movable_node.update_image()
             screen.blit(test_config.movable_node.image, test_config.movable_node.location[0])
+            ticket_to_set_trace += 1
+            if ticket_to_set_trace >= 10:
+                test_config.set_trace()
+                ticket_to_set_trace = 0
+
+            """ draw trace_point """
+            for trace_point in test_config.trace_point_list:
+                screen.blit(test_config.trace_point.image, trace_point)
 
         pygame.display.flip()
         clock.tick(FPS)

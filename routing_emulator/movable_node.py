@@ -181,8 +181,8 @@ class BaseMovableNode(object):
             y_force = sea_map.water_cur_force[x][y][0][1]
 
             if body.movable_node.status == "Connecting":
-                x_velocity = x_velocity
-                y_velocity = y_velocity
+                x_velocity = x_velocity + x_force / 2
+                y_velocity = y_velocity + y_force / 2
 
                 body.movable_node.velocity = [x_velocity, y_velocity]
                 body.velocity = (x_velocity, y_velocity)
