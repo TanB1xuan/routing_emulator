@@ -23,6 +23,7 @@ class TestConfig(object):
 
         pymunk.pygame_util.positive_y_is_up = False
         self.map_size = 1000
+        self.recursive_speed = 0.1
         self.minimum_dis = 100
         self.sea_map = SeaMap(self.map_size)
         self.sea_map.draw_image()
@@ -68,3 +69,8 @@ class TestConfig(object):
         ori_location_node_num = self.convex_hull_obj.hull.vertices[0]
         movable_node_ori_location = self.convex_hull_obj.node_list[ori_location_node_num]
         self.movable_node = movable_node.ConvexHullMovableNode(self, movable_node_ori_location)
+
+        self.movable_node_space = pymunk.Space()
+        self.movable_node_space.gravity = 0, 0
+        self.movable_node_space.add(self.movable_node.node_body.body, self.movable_node.node_body)
+        self.movable_node.update_callback()

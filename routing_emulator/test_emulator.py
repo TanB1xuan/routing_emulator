@@ -69,13 +69,15 @@ def pygame_disp():
                 floating_node.update_node()
                 screen.blit(floating_node.image, floating_node.location[0])
 
+            test_config.floating_node_space.step(test_config.recursive_speed)
+            test_config.movable_node_space.step(test_config.recursive_speed)
+            # test_config.floating_node_space.debug_draw(draw_options)
+            # test_config.movable_node_space.debug_draw(draw_options)
+
             """ movable node control"""
             test_config.movable_node.update_status()
             test_config.movable_node.update_image()
             screen.blit(test_config.movable_node.image, test_config.movable_node.location[0])
-
-            test_config.floating_node_space.step(0.1)
-            test_config.floating_node_space.debug_draw(draw_options)
 
         pygame.display.flip()
         clock.tick(FPS)

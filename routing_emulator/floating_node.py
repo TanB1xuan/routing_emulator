@@ -24,7 +24,7 @@ class FloatingNode(object):
         self.location[0].append(rand_value[1])  # position on y axis
         self.location[1].append(int(self.location[0][0] / 20))
         self.location[1].append(int(self.location[0][1] / 20))
-        self.volecity = []
+        self.velocity = []
         self.original_location = self.location[0]
         self.worth_value = random.randrange(1, 4)
         self.communication_distance = 50
@@ -40,7 +40,7 @@ class FloatingNode(object):
         floating_node_font = Font(font_text, (0x00, 0x00, 0x00), 20)
         pygame.draw.circle(self.image, inner_color, [51, 51], self.radius, )  # inner
         pygame.draw.circle(self.image, edge_color, [51, 51], self.radius, 3)  # edge
-        pygame.draw.circle(self.image, communication_color, [51, 51], 50, 3)  # edge
+        pygame.draw.circle(self.image, communication_color, [51, 51], self.communication_distance, 3)  # edge
         self.image.blit(floating_node_font.surface, [0, 0])  # font
         self.image.set_colorkey(fill_color)
 
@@ -65,7 +65,7 @@ class FloatingNode(object):
             pymunk.Segment(static_body, p_8, p_1, 0.0),
         ]
 
-        '''initialize the node'''
+        '''initialize the pymunk node'''
         mass = 10
         radius = self.radius
         inertia = pymunk.moment_for_circle(mass, 0, radius, (0, 0))
