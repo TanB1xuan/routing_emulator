@@ -20,7 +20,7 @@ from routing_emulator import movable_node
 
 
 class TestConfig(object):
-    def __init__(self):
+    def __init__(self, config_dict):
 
         pymunk.pygame_util.positive_y_is_up = False
         self.map_size = 1000
@@ -32,7 +32,8 @@ class TestConfig(object):
         self.floating_node_space = pymunk.Space()
         self.floating_node_space.gravity = 0, 0
         self.floating_node_list = []
-        self.floating_node_num = 15
+        self.floating_node_num = config_dict['floating_node_num']
+        self.enable_update_vertices = config_dict['vertices_value']
 
         '''set random value of floating nodes' valocation, witch satisfied to gaussian distribute. '''
         rand_value_matrix = []
@@ -53,7 +54,8 @@ class TestConfig(object):
                 FloatingNode([0xE8, 0xFF, 0xFF],
                              self.map_size, rand_value_matrix[i],
                              self.floating_node_space,
-                             self.sea_map)
+                             self.sea_map,
+                             config_dict['communication_scope'])
             )
             self.floating_node_list[i].id = i
         for i in range(self.floating_node_num):

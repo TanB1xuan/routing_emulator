@@ -16,10 +16,8 @@ from .test_config import TestConfig
 from .font import Font
 
 
-def pygame_disp():
-    pygame.init()
+def pygame_disp(test_config :TestConfig):
 
-    test_config = TestConfig()
     map_size = test_config.map_size
     size = width, height = map_size, map_size
     sea_map = test_config.sea_map
@@ -52,12 +50,13 @@ def pygame_disp():
             screen.blit(sea_map.image, [0, 0])
             screen.blit(begin_font.surface, [0, 0])
 
-        # Below: true rouiting
+        # Below: true routing
         elif counter > 41:
             ticket_to_update_water += 1
             if ticket_to_update_water >= FPS * 1:
                 ticket_to_update_water = 0
-                sea_map.rand_update()
+                if test_config.enable_update_vertices:
+                    sea_map.rand_update()
                 sea_map.draw_image()
             screen.blit(sea_map.image, [0, 0])
             screen.blit(test_config.convex_hull_obj.hull_image, [0, 0])
@@ -86,5 +85,6 @@ def pygame_disp():
         pygame.display.flip()
         clock.tick(FPS)
 
-def test_pygame_disp():
-    pygame_disp()
+def test_pygame_disp(test_config):
+    """ main test """
+    pygame_disp(test_config)

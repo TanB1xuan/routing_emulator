@@ -17,8 +17,9 @@ from .water_current import SeaMap
 
 
 class FloatingNode(object):
-    def __init__(self, fill_color: list, map_size: int, rand_value: list, space, sea_map):
+    def __init__(self, fill_color: list, map_size: int, rand_value: list, space, sea_map, cm_scp):
         self.fill_color = fill_color
+        self.id: int
         self.location = [[],[]]  # first list stores the location of pixel, next stores the location of map
         self.location[0].append(rand_value[0])  # position on x axis
         self.location[0].append(rand_value[1])  # position on y axis
@@ -27,7 +28,7 @@ class FloatingNode(object):
         self.velocity = []
         self.original_location = self.location[0]
         self.worth_value = random.randrange(1, 4)
-        self.communication_distance = 50
+        self.communication_distance = cm_scp
         self.size = [105, 105]
         self.fill_color = fill_color
         self.image = pygame.Surface(self.size)
@@ -36,7 +37,7 @@ class FloatingNode(object):
         inner_color = [0xD3, 0xEE, 0x66]
         edge_color = [0xFF, 0x77, 0x55]
         communication_color = [0x7C, 0xAE, 0xF8]
-        font_text = f"X:{self.location[0][0]}; Y:{self.location[0][1]}"
+        font_text = f"X:{self.location[0][0] + 51}; Y:{self.location[0][1] + 51}"
         floating_node_font = Font(font_text, (0x00, 0x00, 0x00), 20)
         pygame.draw.circle(self.image, inner_color, [51, 51], self.radius, )  # inner
         pygame.draw.circle(self.image, edge_color, [51, 51], self.radius, 3)  # edge
@@ -94,11 +95,11 @@ class FloatingNode(object):
         inner_color = [0xD3, 0xEE, 0x66]
         edge_color = [0xFF, 0x77, 0x55]
         communication_color = [0x7C, 0xAE, 0xF8]
-        font_text = f"X:{self.location[0][0]}; Y:{self.location[0][1]}"
+        font_text = f"X:{self.location[0][0] + 51}; Y:{self.location[0][1] + 51}"
         floating_node_font = Font(font_text, (0x00, 0x00, 0x00), 20)
         pygame.draw.circle(self.image, inner_color, [51, 51], self.radius, )  # inner
         pygame.draw.circle(self.image, edge_color, [51, 51], self.radius, 3)  # edge
-        pygame.draw.circle(self.image, communication_color, [51, 51], 50, 3)  # edge
+        pygame.draw.circle(self.image, communication_color, [51, 51], self.communication_distance, 3)  # edge
         self.image.blit(floating_node_font.surface, [0, 0])  # font
         self.image.set_colorkey(self.fill_color)
 
