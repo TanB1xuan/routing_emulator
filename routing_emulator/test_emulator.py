@@ -14,6 +14,7 @@ import pymunk
 from pymunk import pygame_util
 from .test_config import TestConfig
 from .font import Font
+from .movable_node import SearchError
 
 
 def pygame_disp(test_config :TestConfig):
@@ -59,7 +60,7 @@ def pygame_disp(test_config :TestConfig):
                     sea_map.rand_update()
                 sea_map.draw_image()
             screen.blit(sea_map.image, [0, 0])
-            screen.blit(test_config.convex_hull_obj.hull_image, [0, 0])
+            screen.blit(test_config.algorithm_obj.hull_image, [0, 0])
             for floating_node in floating_node_list:
                 floating_node.update_node()
                 screen.blit(floating_node.image, floating_node.location[0])
@@ -70,7 +71,11 @@ def pygame_disp(test_config :TestConfig):
             # test_config.movable_node_space.debug_draw(draw_options)
 
             """ movable node control """
-            test_config.movable_node.update_status()
+            try:
+                test_config.movable_node.update_status()
+            except SearchError:
+                """ all target nodes have been visited """
+                return
             test_config.movable_node.update_image()
             screen.blit(test_config.movable_node.image, test_config.movable_node.location[0])
             ticket_to_set_trace += 1

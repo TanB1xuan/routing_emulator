@@ -18,6 +18,9 @@ from .water_current import SeaMap
 # import random
 
 
+class SearchError(Exception):
+    pass
+
 class BaseMovableNode(object):
     def __init__(self, test_config, ori_location):
         from .test_config import TestConfig
@@ -34,13 +37,14 @@ class BaseMovableNode(object):
         self.visited_node = []
         self.connected_ticket = 0
         self.battery = 100
-        self.max_velocity = 18
+        self.max_velocity = 30
         self.max_acc = 6
         self.rotation_angle = 0
         self.ticket_to_update_acc = 0
         ''' initialize all target node from convex hull '''
-        self.ori_target_list = list(test_config.convex_hull_obj.hull.vertices)
+        self.ori_target_list = list(test_config.algorithm_obj.ori_target_list)
         self.ori_target_list.remove(self.ori_target_list[0])
+        self.ori_target_list.reverse()
 
         self.status = "Planning"
         self.status_list = [
@@ -91,8 +95,8 @@ class BaseMovableNode(object):
         self.image.set_colorkey(self.fill_color)
         self.update_font()
         self.image.blit(self.location_font.surface, [60, 0])
-        self.image.blit(self.status_font.surface, [60, 25])
-        self.image.blit(self.target_font.surface, [60, 50])
+        self.image.blit(self.status_font.surface, [60, 20])
+        self.image.blit(self.target_font.surface, [60, 40])
 
     def __repr__(self):
         return str(self.location)
@@ -101,19 +105,19 @@ class BaseMovableNode(object):
         """ font for location, status and target """
         """ font for location """
         location_font_text = f"X:{self.location[0][0]}; Y:{self.location[0][1]}"
-        self.location_font = BolderFont(location_font_text, (0x00, 0x00, 0x00), 20)
+        self.location_font = BolderFont(location_font_text, (0x00, 0x00, 0x00), 18)
 
         """ font for status """
         if self.status == 'Connecting':
-            self.status_font = BolderFont("Connecting", (0xFF, 0x00, 0xFF), 20)
+            self.status_font = BolderFont("Connecting", (0xFF, 0x00, 0xFF), 18)
         if self.status == 'Planning':
-            self.status_font = BolderFont("Planning", (0x33, 0xCC, 0x55), 20)
+            self.status_font = BolderFont("Planning", (0x33, 0xCC, 0x55), 18)
         if self.status == 'Moving':
-            self.status_font = BolderFont("Moving", (0xAA, 0x88, 0x00), 20)
+            self.status_font = BolderFont("Moving", (0xAA, 0x88, 0x00), 18)
 
         """font for target"""
         target_font_text = f"Target:[{self.target_position[0]}, {self.target_position[1]}]"
-        self.target_font = BolderFont(target_font_text, (0x00, 0x00, 0x00), 20)
+        self.target_font = BolderFont(target_font_text, (0x00, 0x00, 0x00), 18)
 
     def update_status(self):
         """ update target, location and status"""
@@ -138,6 +142,8 @@ class BaseMovableNode(object):
                         self.status = 'Connecting'
 
         """ update target """
+        if len(self.ori_target_list) == 0:
+            raise SearchError
         cur_target_num = self.ori_target_list[0]
         self.target_position = copy.deepcopy(self.test_config.floating_node_list[cur_target_num].location[0])
         self.target_position[0] += 51

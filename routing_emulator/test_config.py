@@ -65,12 +65,12 @@ class TestConfig(object):
             self.floating_node_list[i].update_callback()
 
         """ get and draw the hull """
-        self.convex_hull_obj = RoutingAlgorithm(self)
-        self.convex_hull_obj.get_convex_hulls()
+        self.algorithm_obj = RoutingAlgorithm(self)
+        self.algorithm_obj.get_convex_hulls()
         
         """ add movable node """
-        ori_location_node_num = self.convex_hull_obj.hull.vertices[0]
-        movable_node_ori_location = self.convex_hull_obj.node_list[ori_location_node_num]
+        ori_location_node_num = self.algorithm_obj.hull.vertices[0]
+        movable_node_ori_location = self.algorithm_obj.node_list[ori_location_node_num]
         self.movable_node = movable_node.ConvexHullMovableNode(self, movable_node_ori_location)
 
         self.movable_node_space = pymunk.Space()
