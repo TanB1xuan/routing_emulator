@@ -2,7 +2,7 @@
 
 ## Getting Started:
 #### Pytest:
-Look for: [https://docs.pytest.org/](https://docs.pytest.org/)
+Details at: [https://docs.pytest.org/](https://docs.pytest.org/)
 - setup:  
   Some function that has fixed name, witch will be call at a test case is starting.
 
