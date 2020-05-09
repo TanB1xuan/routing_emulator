@@ -135,7 +135,7 @@ class BaseMovableNode(object):
                     if self.connected_ticket >= 15:
                         self.visited_node.append(floating_node.id)
                         if floating_node.id in self.ori_target_list:
-                            self.ori_target_list.remove(self.ori_target_list[0])
+                            self.ori_target_list.remove(floating_node.id)
                         self.connected_ticket = 0
                         self.status = 'Moving'
                     else:
