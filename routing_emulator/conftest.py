@@ -12,11 +12,20 @@ import pytest
 import tkinter
 import pygame
 import time
+import pickle
+import os.path as osp
+from matplotlib import pyplot as plt
 from .test_config import TestConfig
 
 config_dict = [{}]
+test_config_list = []
+all_test_nodes = [
+    'ConvexHullMovableNode',
+    'ConvexHullMovableNode'
+]
 
-def pytest_runtest_setup(item):
+
+def first_collection(item):
     setup_window = tkinter.Tk()
     setup_window.title("SETUP")
 
@@ -33,8 +42,8 @@ def pytest_runtest_setup(item):
     """ set communication scope """
     communication_scope_frame = tkinter.Frame(setup_window)
 
-    communication_scope_label = tkinter.Label(communication_scope_frame, 
-                                              text="Communication Scope(30~50)", 
+    communication_scope_label = tkinter.Label(communication_scope_frame,
+                                              text="Communication Scope(30~50)",
                                               justify=tkinter.LEFT)
     communication_scope_label.pack(side=tkinter.LEFT)
     default_communication_scope = tkinter.StringVar()
@@ -55,6 +64,7 @@ def pytest_runtest_setup(item):
     vertices_check_check_button.pack(side=tkinter.RIGHT)
 
     """ set OK button """
+
     def OK_command():
         nonlocal setup_window, floating_node_num_entry, communication_scope_entry, vertices_value
         floating_node_num = int(floating_node_num_entry.get())
@@ -75,17 +85,46 @@ def pytest_runtest_setup(item):
     setup_window.mainloop()
 
 
+def pytest_runtest_setup(item):
+# def setup_module():
+    if item.name.endswith("0]"):
+        first_collection(item)
+        time.sleep(0.1)  # for waiting for destroy of setup_window
+        pygame.init()
+        test_config = TestConfig(config_dict[0])
+        test_config_list.append(test_config)
+        config_dict[0]['test_case'] = 0
+    else:
+        cur_name: str = item.name
+        test_flag = cur_name.find(']')
+        test_num = int(cur_name[test_flag - 1])
+        # config_dict[test_num]['test_case'] = test_num
+        # test_config_list[test_num] = test_config_list[0]
+
 @pytest.fixture(name='test_config', scope='session', params=config_dict)
 def get_test_config(request):
-    time.sleep(0.1)  # for waiting for destroy of setup_window
-    pygame.init()
-    test_config = TestConfig(request.param)
+    test_config = test_config_list[0]
+
     yield test_config
+
+
+@pytest.fixture(name='test_movable_node', scope='session', params=all_test_nodes)
+def get_test_node(request):
+    test_config = test_config_list[0]
+
+    yield request.param
 
 
 def pytest_runtest_teardown(item):
     test_config = item.funcargs['test_config']
-    print(test_config.velocity_log)
+    y = test_config.velocity_log
+    x = range(len(y))
+    plt.title("Time-Velocity Curve")
+    plt.plot(x, y)
+    plt.xlabel("Time")
+    plt.ylabel("Velocity")
+    plt.savefig(item.name)
+    plt.show()
 
 
 def pytest_runtest_call(item):
