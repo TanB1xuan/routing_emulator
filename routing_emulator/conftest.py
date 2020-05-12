@@ -123,7 +123,7 @@ def pytest_runtest_teardown(item):
     plt.plot(x, y)
     plt.xlabel("Time")
     plt.ylabel("Velocity")
-    plt.savefig(item.name)
+    plt.savefig('images/' + item.name)
     plt.show()
 
 
