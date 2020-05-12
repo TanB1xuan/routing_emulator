@@ -83,5 +83,10 @@ def get_test_config(request):
     yield test_config
 
 
+def pytest_runtest_teardown(item):
+    test_config = item.funcargs['test_config']
+    print(test_config.velocity_log)
+
+
 def pytest_runtest_call(item):
     print(item)

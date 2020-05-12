@@ -19,6 +19,7 @@ def get_dis(pointX, pointY, lineX1, lineY1, lineX2, lineY2):
         dis = (fabs(a * pointX + b * pointY + c)) / (pow(a * a + b * b, 0.5))
     except ZeroDivisionError as e:
         print(e)
+        raise
     return dis
 
 def get_second_value(elem):
@@ -79,22 +80,22 @@ class RoutingAlgorithm(object):
                         min_dis = cur_dis
                         insert_index = i
 
-                if min_dis <= floating_node.worth_value * 50:
+                if min_dis <= floating_node.worth_value * 30:
                     """ insert the into the selected edge """
                     self.ori_target_list = self.ori_target_list[:insert_index + 1] + \
                                            [cur_id] + self.ori_target_list[insert_index + 1:]
 
                     """ resort the nodes beside insert_index """
-                    # resort_list = self.ori_target_list[insert_index: insert_index + 3]
-                    # ori_x1 = self.node_list[resort_list[0]][0]
-                    # ori_x2 = self.node_list[resort_list[2]][0]
-                    # resort_list = [[x, self.node_list[x][0]] for x in resort_list]
-                    # if (ori_x2 - ori_x1) > 0:
-                    #     resort_list.sort(key=get_second_value, )
-                    # else:
-                    #     resort_list.sort(key=get_second_value, reverse=True)
-                    # self.ori_target_list = self.ori_target_list[:insert_index] + [x[0] for x in resort_list] + \
-                    #                        self.ori_target_list[insert_index + 3:]
+                    resort_list = self.ori_target_list[insert_index: insert_index + 3]
+                    resort_point_position = [[self.node_list[x][0], self.node_list[x][1]] for x in resort_list]
+                    dis1 = sqrt((resort_point_position[0][0] - resort_point_position[1][0]) ** 2 +
+                                (resort_point_position[0][1] - resort_point_position[1][1]) ** 2)
+                    dis2 = sqrt((resort_point_position[0][0] - resort_point_position[2][0]) ** 2 +
+                                (resort_point_position[0][1] - resort_point_position[2][1]) ** 2)
+                    if dis1 > dis2:
+                        resort_list[1], resort_list[2] = resort_list[2], resort_list[1]
+                    self.ori_target_list = self.ori_target_list[:insert_index] + resort_list + \
+                                           self.ori_target_list[insert_index + 3:]
 
         point_list = [self.node_list[x] for x in self.ori_target_list]
         pygame.draw.lines(self.hull_image, self.line_color, True, point_list, 3)

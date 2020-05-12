@@ -77,10 +77,21 @@ class TestConfig(object):
         self.movable_node_space.gravity = 0, 0
         self.movable_node_space.add(self.movable_node.node_body.body, self.movable_node.node_body)
         self.movable_node.update_callback()
-        self.trace_point = TracePoint()
+        self.trace_point_surface_list = []
+        for i in range(30):
+            cur_trace_point = TracePoint(i)
+            self.trace_point_surface_list.append(cur_trace_point)
         self.trace_point_list = []
+        self.velocity_log = []
 
     def set_trace(self):
         x = self.movable_node.location[0][0] + 15
         y = self.movable_node.location[0][1] + 15
         self.trace_point_list.append([x, y])
+        if len(self.trace_point_list) >= 2:
+            new_point = self.trace_point_list[-1]
+            old_point = self.trace_point_list[-2]
+            dis = sqrt((new_point[0] - old_point[0]) ** 2 + (new_point[1] - old_point[1]) ** 2)
+            self.velocity_log.append(dis)
+        else:
+            self.velocity_log.append(0)

@@ -9,7 +9,6 @@
 
 
 import pygame
-import copy
 import pymunk
 import copy
 from math import sqrt, acos, degrees, radians, cos, sin
@@ -97,6 +96,7 @@ class BaseMovableNode(object):
         self.image.blit(self.location_font.surface, [60, 0])
         self.image.blit(self.status_font.surface, [60, 20])
         self.image.blit(self.target_font.surface, [60, 40])
+        self.image.blit(self.velocity_font.surface, [60, 60])
 
     def __repr__(self):
         return str(self.location)
@@ -118,6 +118,14 @@ class BaseMovableNode(object):
         """font for target"""
         target_font_text = f"Target:[{self.target_position[0]}, {self.target_position[1]}]"
         self.target_font = BolderFont(target_font_text, (0x00, 0x00, 0x00), 18)
+
+        """font for target"""
+        try:
+            cur_v = self.test_config.velocity_log[-1]
+        except IndexError:
+            cur_v = 0
+        velocity_font_text = f"Velocity: {int(cur_v)}"
+        self.velocity_font = BolderFont(velocity_font_text, (0x00, 0x00, 0x00), 18)
 
     def update_status(self):
         """ update target, location and status"""

@@ -84,8 +84,13 @@ def pygame_disp(test_config :TestConfig):
                 ticket_to_set_trace = 0
 
             """ draw trace_point """
-            for trace_point in test_config.trace_point_list:
-                screen.blit(test_config.trace_point.image, trace_point)
+            for i in range(len(test_config.trace_point_list)):
+                v = int(test_config.velocity_log[i])
+                try:
+                    image = test_config.trace_point_surface_list[v].image
+                except IndexError:
+                    image = test_config.trace_point_surface_list[-1].image
+                screen.blit(image, test_config.trace_point_list[i])
 
         pygame.display.flip()
         clock.tick(FPS)
