@@ -13,7 +13,7 @@ import pygame
 
 class TracePoint(object):
     def __init__(self, v):
-        self.color = [0xFE - 8 * v, 0x00 + 8 * v, 0x30]
+        self.color = [0xFE - 8 * v, 0x0A + 8 * v, 0x20]
         self.fill_color = [0xE8, 0xFF, 0xFF]
         self.size = 10
         self.image = pygame.Surface([self.size, self.size])

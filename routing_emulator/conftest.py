@@ -14,15 +14,18 @@ import pygame
 import time
 import pickle
 import os.path as osp
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 from .test_config import TestConfig
 
 config_dict = [{}]
 test_config_list = []
 all_test_nodes = [
-    'ConvexHullMovableNode',
+    'MultilayeredPathPlanningNode',
     'ConvexHullMovableNode'
 ]
+runned_test_case = []
 
 
 def first_collection(item):
@@ -87,30 +90,36 @@ def first_collection(item):
 
 def pytest_runtest_setup(item):
 # def setup_module():
-    if item.name.endswith("0]"):
+    if len(runned_test_case) == 0:
+        runned_test_case.append(item.name)
         first_collection(item)
         time.sleep(0.1)  # for waiting for destroy of setup_window
         pygame.init()
         test_config = TestConfig(config_dict[0])
-        test_config_list.append(test_config)
+        temp_test_config = copy_test_config(test_config)
+        test_config_list.append(temp_test_config)
         config_dict[0]['test_case'] = 0
     else:
-        cur_name: str = item.name
-        test_flag = cur_name.find(']')
-        test_num = int(cur_name[test_flag - 1])
+        time.sleep(0.1)  # for waiting for destroy of setup_window
+        pygame.init()
+        runned_test_case.append(item.name)
+        # test_flag = cur_name.find(']')
+        # test_num = int(cur_name[test_flag - 1])
+
         # config_dict[test_num]['test_case'] = test_num
         # test_config_list[test_num] = test_config_list[0]
 
 @pytest.fixture(name='test_config', scope='session', params=config_dict)
 def get_test_config(request):
-    test_config = test_config_list[0]
+    temp_test_config = test_config_list[0]
+    print(request.param)
+    test_config = copy_test_config(temp_test_config)
 
     yield test_config
 
 
 @pytest.fixture(name='test_movable_node', scope='session', params=all_test_nodes)
 def get_test_node(request):
-    test_config = test_config_list[0]
 
     yield request.param
 
@@ -123,9 +132,16 @@ def pytest_runtest_teardown(item):
     plt.plot(x, y)
     plt.xlabel("Time")
     plt.ylabel("Velocity")
-    plt.savefig('images/' + item.name)
-    plt.show()
+    plt.savefig('images/' + item.name + time.strftime("-%Y-%m-%d[%H:%M:%S]", time.localtime()))
+    # plt.show()
 
 
 def pytest_runtest_call(item):
     print(item)
+
+
+def copy_test_config(test_config: TestConfig):
+    temp_obj = TestConfig(config_dict[0])
+    temp_obj.copy_info(test_config)
+
+    return temp_obj

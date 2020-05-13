@@ -224,3 +224,11 @@ class ConvexHullMovableNode(BaseMovableNode):
 
     def update_acceleration(self):
         super(ConvexHullMovableNode, self).update_acceleration()
+
+
+class MultilayeredPathPlanningNode(BaseMovableNode):
+    def update_status(self):
+        super(MultilayeredPathPlanningNode, self).update_status()
+
+    def update_acceleration(self):
+        super(MultilayeredPathPlanningNode, self).update_acceleration()

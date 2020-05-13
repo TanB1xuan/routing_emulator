@@ -76,6 +76,10 @@ def pygame_disp(test_config :TestConfig):
                 test_config.movable_node.update_status()
             except SearchError:
                 """ all target nodes have been visited """
+
+                """ save a picture """
+
+                pygame.quit()
                 return
             test_config.movable_node.update_image()
             screen.blit(test_config.movable_node.image, test_config.movable_node.location[0])
@@ -100,5 +104,7 @@ def pygame_disp(test_config :TestConfig):
 # @pytest.mark.parametrize('test_movable_node', all_test_nodes)
 def test_pygame_disp(test_config, test_movable_node):
     """ main test """
-    print(test_movable_node)
+    # print(test_movable_node)
+    test_config.add_movable_node(test_movable_node)
+
     pygame_disp(test_config)
