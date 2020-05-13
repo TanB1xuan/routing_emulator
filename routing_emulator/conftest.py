@@ -12,7 +12,6 @@ import pytest
 import tkinter
 import pygame
 import time
-import pickle
 import os.path as osp
 import matplotlib
 matplotlib.use('Agg')
@@ -109,19 +108,20 @@ def pytest_runtest_setup(item):
         # config_dict[test_num]['test_case'] = test_num
         # test_config_list[test_num] = test_config_list[0]
 
-@pytest.fixture(name='test_config', scope='session', params=config_dict)
+@pytest.fixture(name='test_config', scope='session', params=all_test_nodes)
 def get_test_config(request):
     temp_test_config = test_config_list[0]
     print(request.param)
     test_config = copy_test_config(temp_test_config)
+    test_config.add_movable_node(request.param)
 
     yield test_config
 
 
-@pytest.fixture(name='test_movable_node', scope='session', params=all_test_nodes)
-def get_test_node(request):
-
-    yield request.param
+# @pytest.fixture(name='test_movable_node', scope='session', params=all_test_nodes)
+# def get_test_node(request):
+#
+#     yield request.param
 
 
 def pytest_runtest_teardown(item):

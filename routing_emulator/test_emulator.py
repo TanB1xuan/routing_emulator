@@ -12,6 +12,7 @@ import sys
 import pygame
 import pymunk
 import pytest
+from .conftest import copy_test_config
 from pymunk import pygame_util
 from .test_config import TestConfig
 from .font import Font
@@ -101,10 +102,10 @@ def pygame_disp(test_config :TestConfig):
         clock.tick(FPS)
 
 
-# @pytest.mark.parametrize('test_movable_node', all_test_nodes)
-def test_pygame_disp(test_config, test_movable_node):
+
+def test_pygame_disp(test_config):
     """ main test """
-    # print(test_movable_node)
-    test_config.add_movable_node(test_movable_node)
+
+    # print(test_config)
 
     pygame_disp(test_config)
