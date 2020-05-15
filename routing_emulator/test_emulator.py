@@ -11,6 +11,7 @@
 import sys
 import pygame
 import pymunk
+import time
 import pytest
 from .conftest import copy_test_config
 from pymunk import pygame_util
@@ -79,6 +80,17 @@ def pygame_disp(test_config :TestConfig):
                 """ all target nodes have been visited """
 
                 """ save a picture """
+                screen.blit(test_config.movable_node.image, test_config.movable_node.location[0])
+                for i in range(len(test_config.trace_point_list)):
+                    v = int(test_config.velocity_log[i])
+                    try:
+                        image = test_config.trace_point_surface_list[v].image
+                    except IndexError:
+                        image = test_config.trace_point_surface_list[-1].image
+                    screen.blit(image, test_config.trace_point_list[i])
+                pygame.image.save(screen, 'print_screen/' +
+                                  test_config.movable_node.__class__.__name__ +
+                                  time.strftime("-%Y-%m-%d[%H:%M:%S]", time.localtime()))
 
                 pygame.quit()
                 return
